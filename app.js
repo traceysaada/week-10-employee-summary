@@ -10,17 +10,123 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const teamMembers = []; 
+const teamMembers = [];
 
-function init(){
-// use inquirer.prompt to get information on the manager for the team you're trying to create. 
-// what information is needed can be found in the class (once you have it passing all tests)
-// once you have the answers then you create a class for that manager and pass the answers in as arguments
-// once the class has created the new manager object successfully you will add it to the array above *teamMembers*
+function init() {
+  // use inquirer.prompt to get information on the manager for the team you're trying to create.
+  function getTeamManagerDetails() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "managerName",
+          message: "please enter managers name",
+        },
+        {
+          type: "input",
+          name: "id",
+          message: "what is your role",
+        },
+        {
+          type: "input",
+          name: "email",
+          message: "please enter your email address",
+        },
+        {
+          type: "input",
+          name: "officeNumber",
+          message: "what is your phone number",
+        },
+      ])
+      .then((usersAnswers) => {
+        const newManager = new Manager(
+          usersAnswers.managerName,
+          usersAnswers.id,
+          usersAnswers.email,
+          usersAnswers.officeNumber
+        );
+        teamMembers.push(newManager);
+        createOtherTeamMembers();
+      });
+    function createOtherTeamMembers() {
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "nextEmployee",
+            message: "what role is next employee going to do",
+            choices: ["engineer", "intern", "none"],
+          },
+        ])
+        .then((usersAnswer) => {
+          if (usersAnswer.nextEmployee === "engineer") {
+            createEngineer();
+          } else if (usersAnswer.nextEmployee === "intern") {
+            createIntern();
+          } else {
+            renderhtml();
+          }
+        });
+    }
+
+    function createEngineer() {
+      inquirer.prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "please enter name",
+        },
+        {
+          type: "input",
+          name: "id",
+          message: "what is your role",
+        },
+        {
+          type: "input",
+          name: "email",
+          message: "please enter your email address",
+        },
+        {
+          type: "input",
+          name: "gitHub",
+          message: "please enter your Github details",
+        },
+      ]);
+    }
+
+    function createIntern() {
+      inquirer.prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "please enter name",
+        },
+        {
+          type: "input",
+          name: "id",
+          message: "what is your role",
+        },
+        {
+          type: "input",
+          name: "email",
+          message: "please enter your email address",
+        },
+        {
+          type: "input",
+          name: "gitHub",
+          message: "please enter your school details",
+        },
+      ]);
+    }
+
+    function renderhtml() {
+      console.log(teamMembers);
+    }
+  }
+  getTeamManagerDetails();
 }
 
-
-init(); 
+init();
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
