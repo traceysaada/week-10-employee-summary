@@ -32,7 +32,7 @@ const createTeam = () => {
       } else if (usersAnswer.nextEmployee === "intern") {
         createIntern();
       } else {
-        renderhtml();
+        createOtherTeamMembers()
       }
     });
 };
@@ -46,7 +46,7 @@ const managerQuestions = [
   {
     type: "input",
     name: "id",
-    message: "what is your role",
+    message: "what is your id",
   },
   {
     type: "input",
@@ -74,7 +74,7 @@ inquirer.prompt(managerQuestions).then((usersAnswers) => {
 
 // Write code to use inquirer to gather information about the development team members,
 function createEngineer() {
-  inquirer.prompt([
+  const EngineerQuestions = [
     {
       type: "input",
       name: "name",
@@ -83,7 +83,7 @@ function createEngineer() {
     {
       type: "input",
       name: "id",
-      message: "what is your role",
+      message: "what is your id",
     },
     {
       type: "input",
@@ -95,112 +95,90 @@ function createEngineer() {
       name: "gitHub",
       message: "please enter your Github details",
     },
-  ]);
-  inquirer.prompt(EngineerQuestions).then(
+  ];
+  inquirer.prompt(EngineerQuestions).then((usersAnswers) => {
+    const newEngineer = new Engineer(
+      usersAnswers.name,
+      usersAnswers.id,
+      usersAnswers.email,
+      usersAnswers.gitHub
+    );
+
+    teamMembers.push(newEngineer);
+    console.log(teamMembers);
+    createTeam();
+  });
+}
+
+function createIntern() {
+  const internQuestions = [
+    {
+      type: "input",
+      name: "name",
+      message: "please enter name",
+    },
+    {
+      type: "input",
+      name: "id",
+      message: "what is your id",
+    },
+    {
+      type: "input",
+      name: "email",
+      message: "please enter your email address",
+    },
+    {
+      type: "input",
+      name: "school",
+      message: "please enter your school details",
+    },
+  ];
+
+  inquirer.prompt(internQuestions).then(
     (usersAnswers) => {
-      const newEngineer = new Engineer(
-        usersAnswers.Name,
+      const newIntern = new Intern(
+        usersAnswers.name,
         usersAnswers.id,
         usersAnswers.email,
-        usersAnswers.github
+        usersAnswers.school
       );
-
-      teamMembers.push(newEngineer);
-      console.log(teamMembers);
-      createTeam();
-    }),
-    function createIntern() {
-      inquirer.prompt([
-        {
-          type: "input",
-          name: "name",
-          message: "please enter name",
-        },
-        {
-          type: "input",
-          name: "id",
-          message: "what is your role",
-        },
-        {
-          type: "input",
-          name: "email",
-          message: "please enter your email address",
-        },
-        {
-          type: "input",
-          name: "school",
-          message: "please enter your school details",
-        },
-      ]);
-      inquirer.prompt(InterQuestions).then(
-        (usersAnswers) => {
-          const newIntern = new Intern(
-            usersAnswers.Name,
-            usersAnswers.id,
-            usersAnswers.email,
-            usersAnswers.school
-          );
-      const newIntern = new Intern();
       teamMembers.push(newIntern);
       createTeam();
-    },
+    });
+}
 
-    function createOtherTeamMembers() {
-      inquirer
-        .prompt([
-          {
-            type: "list",
-            name: "nextEmployee",
-            message: "what role is next employee going to do",
-            choices: ["engineer", "intern", "none"],
-          },
-        ])
-        .then((usersAnswer) => {
-          if (usersAnswer.nextEmployee === "engineer") {
-            createEngineer();
-          } else if (usersAnswer.nextEmployee === "intern") {
-            createIntern();
-          } else {
-            renderhtml();
+      //  creates the file using fs synchronously
+
+        function createOtherTeamMembers() {
+          if (fs.existsSync(OUTPUT_DIR) === false) {
+            fs.mkdirSync(OUTPUT_DIR);
           }
-        });
-    },
-    // and to create objects for each team member (using the correct classes as blueprints!)
+          fs.writeFileSync(outputPath, render(teamMembers));
+        }
+// After the user has input all employees desired, call the `render` function (required
+// above) and pass in an array containing all employee objects; the `render` function will
+// generate and return a block of HTML including templated divs for each employee!
 
-    //  creates the file using fs synchronously
+//   function renderhtml() {
 
-    function createOtherTeamMembers() {
-      if (fs.existsSync(OUTPUT_DIR) === false) {
-        fs.mkdirSync(OUTPUT_DIR);
-      }
-      fs.writeFileSync(outputPath, render(teamMembers));
-    }
-  );
-  }}
-  // After the user has input all employees desired, call the `render` function (required
-  // above) and pass in an array containing all employee objects; the `render` function will
-  // generate and return a block of HTML including templated divs for each employee!
+//   app.get("/", function (req, res) {
+//       res.sendFile(path.join(__dirname, "main.html"));
+//    });
+//    app.get("/manager", function (req, res) {
+//     res.sendFile(path.join(__dirname, "manager.html"));
+//    });
+//    app.get("/engineer", function (req, res) {
+//     res.sendFile(path.join(__dirname, "engineer.html"));
+//   });
+//  app.get("/intern", function (req, res) {
+//     res.sendFile(path.join(__dirname, "intern.html"));
+//   });
 
-  //   function renderhtml() {
-
-  //   app.get("/", function (req, res) {
-  //       res.sendFile(path.join(__dirname, "main.html"));
-  //    });
-  //    app.get("/manager", function (req, res) {
-  //     res.sendFile(path.join(__dirname, "manager.html"));
-  //    });
-  //    app.get("/engineer", function (req, res) {
-  //     res.sendFile(path.join(__dirname, "engineer.html"));
-  //   });
-  //  app.get("/intern", function (req, res) {
-  //     res.sendFile(path.join(__dirname, "intern.html"));
-  //   });
-
-  //console.log(teamMembers);
+//console.log(teamMembers);
 //}
-  //})
-   //getTeamManagerDetails();
- //}
+//})
+//getTeamManagerDetails();
+//}
 // getTeamManagerDetails();
 //init();
 
