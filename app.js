@@ -13,7 +13,7 @@ const render = require("./lib/htmlRenderer");
 
 const teamMembers = [];
 
-// function init() {
+
 // use inquirer.prompt to get information on the manager for the team you're trying to create.
 
 const createTeam = () => {
@@ -155,40 +155,7 @@ function createIntern() {
           }
           fs.writeFileSync(outputPath, render(teamMembers));
         }
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
 
-//   function renderhtml() {
+ 
 
-//   app.get("/", function (req, res) {
-//       res.sendFile(path.join(__dirname, "main.html"));
-//    });
-//    app.get("/manager", function (req, res) {
-//     res.sendFile(path.join(__dirname, "manager.html"));
-//    });
-//    app.get("/engineer", function (req, res) {
-//     res.sendFile(path.join(__dirname, "engineer.html"));
-//   });
-//  app.get("/intern", function (req, res) {
-//     res.sendFile(path.join(__dirname, "intern.html"));
-//   });
 
-//console.log(teamMembers);
-//}
-//})
-//getTeamManagerDetails();
-//}
-// getTeamManagerDetails();
-//init();
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work!
