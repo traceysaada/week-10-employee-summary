@@ -15,8 +15,27 @@ const teamMembers = [];
 
 // function init() {
 // use inquirer.prompt to get information on the manager for the team you're trying to create.
-// function getTeamManagerDetails() {
-inquirer.prompt(managerQuestions)
+
+const createTeam = () => {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "nextEmployee",
+        message: "what role is next employee going to do",
+        choices: ["engineer", "intern", "none"],
+      },
+    ])
+    .then((usersAnswer) => {
+      if (usersAnswer.nextEmployee === "engineer") {
+        createEngineer();
+      } else if (usersAnswer.nextEmployee === "intern") {
+        createIntern();
+      } else {
+        renderhtml();
+      }
+    });
+};
 
 const managerQuestions = [
   {
@@ -49,33 +68,11 @@ inquirer.prompt(managerQuestions).then((usersAnswers) => {
     usersAnswers.officeNumber
   );
   teamMembers.push(newManager);
-  createOtherTeamMembers();
+  console.log(teamMembers);
+  createTeam();
 });
 
-// }}
-
 // Write code to use inquirer to gather information about the development team members,
-function createOtherTeamMembers() {
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "nextEmployee",
-        message: "what role is next employee going to do",
-        choices: ["engineer", "intern", "none"],
-      },
-    ])
-    .then((usersAnswer) => {
-      if (usersAnswer.nextEmployee === "engineer") {
-        createEngineer();
-      } else if (usersAnswer.nextEmployee === "intern") {
-        createIntern();
-      } else {
-        renderhtml();
-      }
-    });
-}
-// and to create objects for each team member (using the correct classes as blueprints!)
 function createEngineer() {
   inquirer.prompt([
     {
@@ -99,10 +96,10 @@ function createEngineer() {
       message: "please enter your Github details",
     },
   ]);
-  teamMembers.push(newManager);
-  createOtherTeamMembers();
+  const newEngineer = new Engineer();
+  teamMembers.push(newEngineer);
+  createTeam();
 }
-
 function createIntern() {
   inquirer.prompt([
     {
@@ -122,11 +119,36 @@ function createIntern() {
     },
     {
       type: "input",
-      name: "gitHub",
+      name: "school",
       message: "please enter your school details",
     },
   ]);
+  const newIntern = new Intern();
+  teamMembers.push(newIntern);
+  createTeam();
 }
+
+function createOtherTeamMembers() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "nextEmployee",
+        message: "what role is next employee going to do",
+        choices: ["engineer", "intern", "none"],
+      },
+    ])
+    .then((usersAnswer) => {
+      if (usersAnswer.nextEmployee === "engineer") {
+        createEngineer();
+      } else if (usersAnswer.nextEmployee === "intern") {
+        createIntern();
+      } else {
+        renderhtml();
+      }
+    });
+}
+// and to create objects for each team member (using the correct classes as blueprints!)
 
 //  creates the file using fs synchronously
 
@@ -141,15 +163,15 @@ function createOtherTeamMembers() {
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
 
-// function renderhtml() {
+//  function renderhtml() {
 
 //   app.get("/", function (req, res) {
-//     res.sendFile(path.join(__dirname, "main.html"));
-//   });
-//   app.get("/manager", function (req, res) {
+//      res.sendFile(path.join(__dirname, "main.html"));
+//    });
+//    app.get("/manager", function (req, res) {
 //     res.sendFile(path.join(__dirname, "manager.html"));
-//   });
-//   app.get("/engineer", function (req, res) {
+//    });
+//    app.get("/engineer", function (req, res) {
 //     res.sendFile(path.join(__dirname, "engineer.html"));
 //   });
 //   app.get("/intern", function (req, res) {
